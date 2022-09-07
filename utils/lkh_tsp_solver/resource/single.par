@@ -1,0 +1,4 @@
+PROBLEM_FILE = /home/zjucvg/tmp_test/fuel_voxblox_turtlebot_ws/src/fuel_planner_turtlebot/utils/lkh_tsp_solver/resource/single.tsp
+GAIN23 = NO
+OUTPUT_TOUR_FILE =/home/zjucvg/tmp_test/fuel_voxblox_turtlebot_ws/src/fuel_planner_turtlebot/utils/lkh_tsp_solver/resource/single.txt
+RUNS = 1

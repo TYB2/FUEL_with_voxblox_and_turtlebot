@@ -1,0 +1,14 @@
+<launch>
+    <node name="test_node" pkg="plan_env" type="test_node" output="screen">
+        <remap from="/test_node/esdf_map_in" to="/voxblox_node/esdf_map_out" />
+        <remap from="/test_node/tsdf_map_in" to="/voxblox_node/tsdf_map_out" />
+        <param name="use_tf_transforms" value="false" />
+        <param name="tsdf_voxel_size" value="0.2" />
+        <param name="tsdf_voxels_per_side" value="16" />
+
+        <param name="update_mesh_every_n_sec" value="1.0" />   
+        <param name="publish_traversable" value="true" />              
+        <param name="publish_slices" value="true" />                   
+        <param name="publish_pointclouds_on_update" value="true" />   
+    </node>
+</launch>
