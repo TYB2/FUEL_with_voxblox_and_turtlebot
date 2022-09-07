@@ -1,0 +1,5 @@
+roslaunch turtlebot_gazebo turtlebot_kinect_hokuyo_world_maze.launch
+
+roslaunch turtlebot_gazebo gmapping_demo.launch
+
+roslaunch turtlebot_gazebo movebase_demo.launch 

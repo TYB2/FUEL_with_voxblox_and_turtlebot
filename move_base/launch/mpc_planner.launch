@@ -1,0 +1,84 @@
+<!-- move base -->
+<launch>
+  <master auto="start"/>
+    <arg name="visualize" default="true"/>
+
+
+<param name="/use_sim_time" value="true"/>
+
+	<arg name="scan_topic" default="/scan"/>
+
+    <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen" >
+      <remap from="/scan" to="$(arg scan_topic)"/>
+      <param name="map_frame" value="map"/>
+      <param name="odom_frame" value="odom"/>
+      <param name="base_frame" value="base_footprint"/>
+      <param name="map_update_interval" value="2.0"/>
+      <param name="maxUrange" value="50.0"/>
+      <param name="maxRange" value="50.0"/>
+      <param name="sigma" value="0.05"/>
+      <param name="kernelSize" value="1"/>
+      <param name="lstep" value="0.05"/>
+      <param name="astep" value="0.05"/>
+      <param name="iterations" value="5"/>
+      <param name="lsigma" value="0.075"/>
+      <param name="ogain" value="3.0"/>
+      <param name="lskip" value="0"/>
+      <param name="srr" value="0.01"/>
+      <param name="srt" value="0.02"/>
+      <param name="str" value="0.01"/>
+      <param name="stt" value="0.02"/>
+      <param name="linearUpdate" value="0.01"/>
+      <param name="angularUpdate" value="0.01"/>
+      <param name="temporalUpdate" value="0.1"/>
+      <param name="resampleThreshold" value="0.5"/>
+      <param name="particles" value="30"/>
+      <param name="xmin" value="-5.0"/>
+      <param name="ymin" value="-5.0"/>
+      <param name="xmax" value="5.0"/>
+      <param name="ymax" value="5.0"/>
+      <param name="delta" value="0.1"/>
+      <param name="llsamplerange" value="0.01"/>
+      <param name="llsamplestep" value="0.01"/>
+      <param name="lasamplerange" value="0.005"/>
+      <param name="lasamplestep" value="0.005"/>
+      <param name="minimumScore" value="0.005"/>
+    </node>
+
+
+    <node pkg="move_base" type="global_planner_node" respawn="false" name="global_planner_node" output="screen">
+
+        <remap from="/cmd_vel" to="/mobile_base/commands/velocity"/>
+
+      <rosparam file="$(find mpc_local_planner_examples)/cfg/diff_drive/costmap_common_params.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find mpc_local_planner_examples)/cfg/diff_drive/global_costmap_params.yaml" command="load" />
+
+
+      <param name="base_global_planner" value="global_planner/GlobalPlanner" />
+      <param name="planner_frequency" value="1.0" />
+      <param name="planner_patience" value="5.0" />
+
+      <!-- <param name="global_costmap/global_frame" value="map"/>
+      <param name="global_costmap/robot_base_frame" value="base_footprint"/>
+      <param name="global_costmap/laser_scan_sensor/sensor_frame" value="base_laser_link"/>
+      <param name="global_costmap/laser_scan_sensor/topic" value="/scan"/>     -->
+    </node>
+    
+    <node pkg="move_base" type="local_tracker_node" respawn="false" name="local_tracker_node" output="screen">
+
+      <remap from="/cmd_vel" to="/mobile_base/commands/velocity"/>
+
+      <rosparam file="$(find mpc_local_planner_examples)/cfg/diff_drive/costmap_common_params.yaml" command="load" ns="local_costmap" />
+      <rosparam file="$(find mpc_local_planner_examples)/cfg/diff_drive/local_costmap_params.yaml" command="load" />
+      <rosparam file="$(find mpc_local_planner_examples)/cfg/diff_drive/mpc_local_planner_params_minimum_time.yaml" command="load" />
+      <!-- <rosparam file="$(find mpc_local_planner_examples)/cfg/diff_drive/mpc_local_planner_params_quadratic_form.yaml" command="load" /> -->
+      <!-- <rosparam file="$(find mpc_local_planner_examples)/cfg/diff_drive/costmap_converter_params.yaml" command="load" />  -->
+
+      <param name="base_local_planner" value="mpc_local_planner/MpcLocalPlannerROS" />
+      <param name="controller_frequency" value="5.0" />
+      <param name="controller_patience" value="15.0" />
+
+      <!-- <param name="MpcLocalPlannerROS/controller/publish_ocp_results" value="true" if="$(arg plot)" /> -->
+    </node>
+   <!-- <node if="$(arg visualize)" name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find move_base)/rviz/turtlebot_tracker.rviz" /> -->
+</launch>

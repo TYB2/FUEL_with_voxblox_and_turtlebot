@@ -1,0 +1,5 @@
+geometry_msgs/PoseStamped[] path
+geometry_msgs/PoseStamped goal
+bool turn_flag
+---
+int64 succeed

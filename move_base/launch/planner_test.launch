@@ -1,0 +1,6 @@
+<!-- move base -->
+<launch>
+    <arg name="visualize" default="true"/>
+  <node pkg="move_base" type="planner_test_node" name="planner_test_node" output="screen"/>
+   <node if="$(arg visualize)" name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find move_base)/rviz/turtlebot_tracker.rviz" />
+</launch>

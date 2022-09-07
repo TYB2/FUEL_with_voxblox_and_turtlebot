@@ -1,0 +1,28 @@
+<!-- move base -->
+<launch>
+  <master auto="start"/>
+    <arg name="visualize" default="false"/>
+
+<!-- <param name="use_sim_time" value="true" /> -->
+
+  <node pkg="move_base" type="trajectory_recode_node" respawn="false" name="trajectory_recode_node" output="screen"/>
+
+  <node pkg="move_base" type="local_tracker_node" respawn="false" name="local_tracker_node" output="screen">
+
+    <remap from="/cmd_vel" to="/mobile_base/commands/velocity"/>
+
+    <rosparam file="$(find mpc_local_planner_examples)/cfg/diff_drive/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find mpc_local_planner_examples)/cfg/diff_drive/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find mpc_local_planner_examples)/cfg/diff_drive/mpc_local_planner_params_minimum_time.yaml" command="load" />
+    <!-- <rosparam file="$(find mpc_local_planner_examples)/cfg/diff_drive/mpc_local_planner_params_quadratic_form.yaml" command="load" /> -->
+		<!-- <rosparam file="$(find mpc_local_planner_examples)/cfg/diff_drive/costmap_converter_params.yaml" command="load" />  -->
+
+		<param name="base_local_planner" value="mpc_local_planner/MpcLocalPlannerROS" />
+		<param name="controller_frequency" value="5.0" />
+		<param name="controller_patience" value="15.0" />
+
+    <!-- <param name="MpcLocalPlannerROS/controller/publish_ocp_results" value="true" if="$(arg plot)" /> -->
+	</node>
+
+    <node if="$(arg visualize)" name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find move_base)/rviz/mpc_tracker.rviz" />
+</launch>
