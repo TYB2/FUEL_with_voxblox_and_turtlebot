@@ -1,0 +1,6 @@
+
+roslaunch exploration_manager turtlrbot_exploration.launch 
+roslaunch exploration_manager gmapping_local_tracker.launch
+roslaunch exploration_manager exploration_with_voxblox_and_turtlebot.launch
+
+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
